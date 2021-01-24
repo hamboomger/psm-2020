@@ -1,17 +1,20 @@
 import React from "react";
-import {Grid, makeStyles, Paper} from "@material-ui/core";
+import {makeStyles, Paper} from "@material-ui/core";
+import {useActiveCells, useSetActiveCells, useUpdateCell} from "../AppContext";
 
 interface Props {
-  isActive: boolean
+  coords: string
 }
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    height: 20,
-    width: 20,
+    height: 25,
+    width: 25,
     transition: theme.transitions.create(["background", "background-color"], {
       duration: theme.transitions.duration.short,
     }),
+  },
+  paperHover: {
     '&:hover': {
       background: "#d9d9d9",
     },
@@ -21,11 +24,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const GridCell: React.FC<Props> = ({ isActive }) => {
+const GridCell: React.FC<Props> = ({ coords }) => {
   const classes = useStyles();
+  const activeCells = useActiveCells();
+  const setActive = useUpdateCell();
+  const setActiveCells = useSetActiveCells();
 
-  const cellClasses = isActive ? `${classes.paper} ${classes.active}` : `${classes.paper}`
-  return <Paper className={cellClasses}/>
+  const isActive = activeCells.has(coords);
+  const cellClasses = isActive ? `${classes.paper} ${classes.active}` : `${classes.paper} ${classes.paperHover}`
+  return <Paper onClick={() => {
+    setActiveCells(new Set<string>(['1.4']))
+    setActive(coords, !isActive)
+  }} className={cellClasses}/>
 }
 
 export default GridCell;
