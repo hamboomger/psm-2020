@@ -35,6 +35,7 @@ const GridCell: React.FC<Props> = ({ coords }) => {
   return <Paper onClick={() => {
     setActiveCells(new Set<string>(['1.4']))
     setActive(coords, !isActive)
+    console.log(`Cells: ${Array.from(activeCells)}`)
   }} className={cellClasses}/>
 }
 

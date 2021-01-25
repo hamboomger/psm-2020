@@ -7,6 +7,9 @@ import {Container} from "typedi";
 import {GameOfLiveService} from "./services/GameOfLiveService";
 import {useSetActiveCells} from "./AppContext";
 
+export const DEFAULT_GRID_ROWS_NUMBER = 20
+export const DEFAULT_GRID_COLUMNS_NUMBER = 30
+
 const useStyles = makeStyles(() => ({
   root: {
     marginTop: 20,
@@ -16,6 +19,12 @@ const useStyles = makeStyles(() => ({
     width: 20,
   },
 }));
+
+export interface Dimensions {
+  cols: number,
+  rows: number,
+}
+
 const golService = Container.get(GameOfLiveService);
 
 function App() {
@@ -23,6 +32,10 @@ function App() {
   const setActiveCells = useSetActiveCells();
   const [started, setStarted] = useState(false);
   const [intervalRef, setIntervalRef] = useState<any>();
+  const [dimensions, setDimensions] = useState<Dimensions>({
+    cols: DEFAULT_GRID_COLUMNS_NUMBER,
+    rows: DEFAULT_GRID_ROWS_NUMBER
+  });
 
   useEffect(() => {
     let interval;
@@ -30,7 +43,7 @@ function App() {
       interval = setInterval(() => {
         const activeCells = golService.nextClock();
         setActiveCells(activeCells);
-      }, 500)
+      }, 200)
       setIntervalRef(interval);
     } else if (!started && intervalRef){
       clearInterval(intervalRef);
@@ -41,9 +54,14 @@ function App() {
   return (
     <>
       <Box className={classes.root}>
-        <GridContainer/>
+        <GridContainer dimensions={dimensions}/>
       </Box>
-      <GameSettings started={started} setStarted={setStarted}/>
+      <GameSettings
+        started={started}
+        setStarted={setStarted}
+        dimensions={dimensions}
+        setDimensions={setDimensions}
+      />
     </>
   );
 }

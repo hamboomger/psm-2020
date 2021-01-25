@@ -2,7 +2,11 @@ import _ from 'lodash'
 import React from 'react';
 import {Grid, makeStyles} from '@material-ui/core';
 import GridCell from "./GridCell";
-import {DEFAULT_GRID_COLUMNS_NUMBER, DEFAULT_GRID_ROWS_NUMBER} from "./GameSettings";
+import {Dimensions} from "../App";
+
+interface Props {
+  dimensions: Dimensions
+}
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -10,20 +14,22 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const GridContainer: React.FC = () => {
+const GridContainer: React.FC<Props> = ({ dimensions }) => {
   const classes = useStyles();
-  const makeRow = (row: number) => _.range(DEFAULT_GRID_COLUMNS_NUMBER).map(col => (
-    <Grid key={col} item>
-      <GridCell coords={`${row}.${col}`}/>
-    </Grid>
-  ));
-  const rows = _.range(DEFAULT_GRID_ROWS_NUMBER).map(i => (
-    <Grid key={i} item xs={12}>
-      <Grid container justify="center" spacing={1}>
-        {makeRow(i)}
+  const rows = _.range(dimensions.rows).map(row => {
+    const columns = _.range(dimensions.cols).map(col => (
+      <Grid key={col} item>
+        <GridCell coords={`${row}.${col}`}/>
       </Grid>
-    </Grid>
-  ))
+    ));
+    return (
+      <Grid key={row} item xs={12}>
+        <Grid container justify="center" spacing={1}>
+          {columns}
+        </Grid>
+      </Grid>
+    );
+  });
   return (
     <Grid container className={classes.root} spacing={1}>
       {rows}

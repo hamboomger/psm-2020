@@ -20,19 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25abb6b1-fe77-4d15-9b16-43598c432801" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/AppContext.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/GameSettings.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GameSettings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameSettings.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/GridCell.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GridCell.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/GridContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GridContainer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/GameOfLiveService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/GameOfLiveService.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +46,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT&#10;JavaScript" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -76,7 +69,8 @@
       <workItem from="1611251804635" duration="1170000" />
       <workItem from="1611256313486" duration="14323000" />
       <workItem from="1611496707904" duration="62000" />
-      <workItem from="1611496781597" duration="8372000" />
+      <workItem from="1611496781597" duration="11345000" />
+      <workItem from="1611584928183" duration="1451000" />
     </task>
     <servers />
   </component>
@@ -108,17 +102,21 @@
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
     <state x="695" y="354" key="#com.intellij.fileTypes.FileTypeChooser/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611324628923" />
-    <state x="660" y="291" width="600" height="522" key="find.popup" timestamp="1611504863873">
+    <state x="100" y="125" width="1720" height="855" key="DiffContextDialog" timestamp="1611506749272">
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
-    <state x="660" y="291" width="600" height="522" key="find.popup/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611504863873" />
+    <state x="100" y="125" width="1720" height="855" key="DiffContextDialog/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611506749272" />
+    <state x="660" y="291" width="600" height="522" key="find.popup" timestamp="1611507380696">
+      <screen x="0" y="25" width="1920" height="1055" />
+    </state>
+    <state x="660" y="291" width="600" height="522" key="find.popup/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611507380696" />
     <state x="625" y="255" key="run.anything.popup" timestamp="1611327716247">
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
     <state x="625" y="255" key="run.anything.popup/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611327716247" />
-    <state x="625" y="259" width="670" height="676" key="search.everywhere.popup" timestamp="1611504808693">
+    <state x="625" y="259" width="670" height="676" key="search.everywhere.popup" timestamp="1611507402138">
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
-    <state x="625" y="259" width="670" height="676" key="search.everywhere.popup/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611504808693" />
+    <state x="625" y="259" width="670" height="676" key="search.everywhere.popup/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611507402138" />
   </component>
 </project>

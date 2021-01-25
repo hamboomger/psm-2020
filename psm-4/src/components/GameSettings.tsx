@@ -5,9 +5,8 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import {Container} from "typedi";
 import {GameOfLiveService} from "../services/GameOfLiveService";
 import {useActiveCells, useSetActiveCells} from "../AppContext";
+import {Dimensions} from "../App";
 
-export const DEFAULT_GRID_ROWS_NUMBER = 20
-export const DEFAULT_GRID_COLUMNS_NUMBER = 30
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,10 +28,12 @@ const useStyles = makeStyles(() => ({
 interface Props {
   started: boolean,
   setStarted: (val: boolean) => void
+  dimensions: Dimensions
+  setDimensions: (dimensions: Dimensions) => void
 }
 
 const golService = Container.get(GameOfLiveService);
-const GameSettings: React.FC<Props> = ({started, setStarted}) => {
+const GameSettings: React.FC<Props> = ({started, setStarted, dimensions, setDimensions}) => {
   const activeCells = useActiveCells();
   const setActiveCells = useSetActiveCells();
   const classes = useStyles();
@@ -46,15 +47,53 @@ const GameSettings: React.FC<Props> = ({started, setStarted}) => {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <TextField id="rows"/>
+            <TextField id="rows" value={dimensions.rows} disabled/>
           </Grid>
           <Grid item xs={2} className={classes.buttonContainer}>
-            <IconButton color="primary" aria-label="Delete row">
+            <IconButton onClick={() => {
+              setDimensions({
+                ...dimensions,
+                rows: dimensions.rows - 5,
+              })
+            }} color="primary" aria-label="Delete row">
               <RemoveIcon/>
             </IconButton>
           </Grid>
           <Grid item xs={2} className={classes.buttonContainer}>
-            <IconButton color="primary" aria-label="Add row">
+            <IconButton onClick={() => {
+              setDimensions({
+                ...dimensions,
+                rows: dimensions.rows + 5,
+              })
+            }} color="primary" aria-label="Add row">
+              <AddIcon/>
+            </IconButton>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography align="right">
+              # of cols:
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <TextField id="cols" value={dimensions.cols} disabled/>
+          </Grid>
+          <Grid item xs={2} className={classes.buttonContainer}>
+            <IconButton onClick={() => {
+              setDimensions({
+                ...dimensions,
+                cols: dimensions.cols - 5,
+              })
+            }} color="primary" aria-label="Delete row">
+              <RemoveIcon/>
+            </IconButton>
+          </Grid>
+          <Grid item xs={2} className={classes.buttonContainer}>
+            <IconButton onClick={() => {
+              setDimensions({
+                ...dimensions,
+                cols: dimensions.cols + 5,
+              })
+            }} color="primary" aria-label="Add row">
               <AddIcon/>
             </IconButton>
           </Grid>
@@ -63,8 +102,8 @@ const GameSettings: React.FC<Props> = ({started, setStarted}) => {
           if (!started) {
             setStarted(true);
             golService.resetToNewGame({
-              rows: DEFAULT_GRID_ROWS_NUMBER,
-              columns: DEFAULT_GRID_COLUMNS_NUMBER,
+              rows: dimensions.rows,
+              columns: dimensions.cols,
               activeCellsOnStart: activeCells
             });
           } else {
