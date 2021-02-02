@@ -1,19 +1,20 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Circle, KonvaNodeComponent, Layer, Line} from "react-konva";
+import {Circle, Line} from "react-konva";
 import Konva from "konva";
 import {pendulum} from "../lib/pendulumFunctions";
 import {PendulumStore} from "../lib/AppState";
 
-interface Props {
-  animationStarted: boolean,
-  setAnimationStarted: (val: boolean) => void,
+function setAnimationStarted(animationStarted: boolean) {
+  PendulumStore.update(s => {
+    s.animationStarted = animationStarted;
+  });
 }
 
-const Pendulum: React.FC<Props> = ({ animationStarted, setAnimationStarted }) => {
+const Pendulum: React.FC = () => {
   const circleRef = useRef<Konva.Circle>(null);
   const lineRef = useRef<Konva.Line>(null);
 
-  const { pivotCoords, pendCoords } = PendulumStore.useState();
+  const { pivotCoords, pendCoords, animationStarted } = PendulumStore.useState();
   const [anim, setAnim] = useState<Konva.Animation | undefined>();
   const [pivotX, pivotY] = pivotCoords;
   const [pendX, pendY] = [circleRef.current?.x() ?? pendCoords[0], circleRef.current?.y() ?? pendCoords[1]];
@@ -22,6 +23,7 @@ const Pendulum: React.FC<Props> = ({ animationStarted, setAnimationStarted }) =>
     if (animationStarted && !anim) {
       const sLength = pendulum.getStringLength(pivotCoords, [pendX, pendY]);
       const angle = pendulum.theta(pivotCoords, [pendX, pendY], 'deg');
+      console.log('Angle degrees: ' + angle);
       const thetaFun = pendulum.thetaFunction(angle*(Math.PI/180), sLength);
       const circle = circleRef.current!;
       const line = lineRef.current!;
@@ -62,7 +64,12 @@ const Pendulum: React.FC<Props> = ({ animationStarted, setAnimationStarted }) =>
         draggable={true}
         onDragMove={(e) => lineRef.current?.points([pivotX, pivotY, e.target.x(), e.target.y()])}
         onDragStart={() => setAnimationStarted(false)}
-        onDragEnd={() => setAnimationStarted(true)}
+        onDragEnd={(e) => {
+          PendulumStore.update(s => {
+            s.animationStarted = true;
+            s.pendCoords = [e.target.x(), e.target.y()];
+          })
+        }}
       />
     </>
   )

@@ -1,13 +1,22 @@
 type AngleUnits = 'rad' | 'deg';
 
+export type Vector = [x: number, y: number]
+export type PhaseSpace = Array<[t: number, coord: Vector, vector: Vector]>
+
+export interface PhaseSpaceParams {
+  dt: number,
+  friction: number,
+  iterations: number,
+  g: number
+}
+
 export const pendulum = {
   theta(pivot: [number, number], pendulum: [number, number], units: AngleUnits): number {
     const adjSide = Math.abs(pivot[1] - pendulum[1]);
     const oppSide = Math.abs(pivot[0] - pendulum[0]);
 
-    console.log(adjSide);
-    console.log(oppSide);
-
+    console.log('adjSide: ' + adjSide);
+    console.log('oppSide: ' + oppSide);
 
     const angleRad = Math.atan(oppSide / adjSide) ;
     return units === 'rad' ? angleRad : angleRad * 180 / Math.PI
@@ -30,5 +39,25 @@ export const pendulum = {
     const oppSide = sLength * Math.sin(angleDeg * Math.PI / 180);
 
     return [pivot[0]+oppSide, pivot[1]+adjSide];
+  },
+
+  phaseSpace(theta: number, L: number, params: PhaseSpaceParams): PhaseSpace {
+    const result: PhaseSpace = [];
+    const { iterations, friction, g, dt } = params;
+    let currIter = 0;
+    let t = 0;
+    let dotTheta = 0;
+    while (currIter++ < iterations) {
+      const coord: Vector = [theta, dotTheta];
+      const doubleDotTheta = -friction*dotTheta - g / L * Math.sin(theta);
+      const vector: Vector = [dotTheta, doubleDotTheta];
+      result.push([t, coord, vector]);
+
+      theta += dotTheta*dt;
+      dotTheta += doubleDotTheta*dt;
+      t += dt;
+    }
+
+    return result;
   }
 }

@@ -2,6 +2,7 @@ import {Fab, makeStyles} from '@material-ui/core';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import React from "react";
+import {PendulumStore} from "../lib/AppState";
 
 const useStyles = makeStyles((theme) => ({
   fabButton: {
@@ -15,17 +16,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {
-  animationStarted: boolean,
-  setAnimationStarted: (val: boolean) => void
-}
-
-const StartButton: React.FC<Props> = ({animationStarted, setAnimationStarted}) => {
+const StartButton: React.FC = () => {
+  const animationStarted = PendulumStore.useState((e) => e.animationStarted)
   const classes = useStyles();
 
   return (
     <Fab onClick={() => {
-      setAnimationStarted(!animationStarted);
+      PendulumStore.update((s) => {
+        s.animationStarted = !animationStarted
+      });
     }}
          variant="extended"
          color="primary"

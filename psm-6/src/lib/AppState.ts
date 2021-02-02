@@ -1,4 +1,5 @@
 import {Store} from "pullstate";
+import {config} from "./config";
 
 interface IPendulumStore {
   pivotCoords: [x: number, y: number]
@@ -9,9 +10,14 @@ interface IPendulumStore {
 
 export const PendulumStore = new Store<IPendulumStore>({
   animationStarted: false,
-  pivotCoords: [250, 250],
-  pendCoords: [350, 450],
+  pivotCoords: [window.innerWidth/4, 0],
+  pendCoords: [window.innerWidth/4, 250],
   theta: () => [0, 0],
 });
 
-
+export const AppParametersStore = new Store({
+  g: config.g,
+  friction: config.friction,
+  dt: config.dt,
+  iterations: config.iterations
+});
