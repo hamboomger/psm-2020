@@ -3,6 +3,7 @@ import {Circle, Line} from "react-konva";
 import Konva from "konva";
 import {pendulum} from "../lib/pendulumFunctions";
 import {PendulumStore} from "../lib/AppState";
+import {PSDSubscriber} from "./plotting/PhaseSpaceDataObservable";
 
 function setAnimationStarted(animationStarted: boolean) {
   PendulumStore.update(s => {
@@ -18,18 +19,21 @@ const Pendulum: React.FC = () => {
   const [anim, setAnim] = useState<Konva.Animation | undefined>();
   const [pivotX, pivotY] = pivotCoords;
   const [pendX, pendY] = [circleRef.current?.x() ?? pendCoords[0], circleRef.current?.y() ?? pendCoords[1]];
+  const [phaseSpaceSub, setPhaseSpaceSub] = useState<PSDSubscriber>()
 
   useEffect(() => {
     if (animationStarted && !anim) {
       const sLength = pendulum.getStringLength(pivotCoords, [pendX, pendY]);
       const angle = pendulum.theta(pivotCoords, [pendX, pendY], 'deg');
-      console.log('Angle degrees: ' + angle);
       const thetaFun = pendulum.thetaFunction(angle*(Math.PI/180), sLength);
       const circle = circleRef.current!;
       const line = lineRef.current!;
-      console.log('New animation created')
+      const realTime = Date.now();
       const anim = new Konva.Animation((frame => {
-        const { time } = frame!;
+        const { time, frameRate } = frame!;
+        console.log(`time: ${time/1000}`);
+        console.log(`real time: ${(Date.now() - realTime)/1000}`);
+        console.log(`fps: ${frameRate}`)
         const newAngle = thetaFun(time/100);
         const newCoords = pendulum.getCoords(pivotCoords, newAngle, sLength);
         circle.move({ x: newCoords[0] - circle.x(), y: newCoords[1] - circle.y() });

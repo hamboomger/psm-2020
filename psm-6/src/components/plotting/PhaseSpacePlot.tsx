@@ -1,41 +1,65 @@
-import React, {useEffect, useRef, useState} from "react";
-import {AppParametersStore, PendulumStore} from "../../lib/AppState";
-import {pendulum, PhaseSpaceParams, Vector} from "../../lib/pendulumFunctions";
-import {buildD3Plot, PlotData} from "./d3Plot";
+import React from "react";
+import {IPendulumStore} from "../../lib/AppState";
+import {pendulum, PhaseSpace, PhaseSpaceParams, Vector} from "../../lib/pendulumFunctions";
+import './plot.css';
+import {PhaseSpaceDataObservable, PSDSubscriber} from "./PhaseSpaceDataObservable";
+import {D3PlotBuilder} from "./D3PlotBuilder";
 
 interface Props {
   width: number
   height: number
+  pendInfo: IPendulumStore
+  params: PhaseSpaceParams
 }
 
-function getPhaseSpaceData(pivotCoords: Vector, pendCoords: Vector, params: PhaseSpaceParams): PlotData {
+interface State {
+  currentPatch: number;
+}
+
+function createObservable(pivotCoords: Vector, pendCoords: Vector): PhaseSpaceDataObservable {
   const theta = pendulum.theta(pivotCoords, pendCoords, 'rad');
   const L = pendulum.getStringLength(pivotCoords, pendCoords);
-  const phaseSpace = pendulum.phaseSpace(theta, L, params);
-  return phaseSpace.map(ps => {
-    const [t, coord,] = ps;
-    return { t, theta: coord[0], dotTheta: coord[1] };
-  });
+  return new PhaseSpaceDataObservable(theta, L);
 }
 
-const PhaseSpacePlot: React.FC<Props> = ({ width, height}) => {
-  const svgRef = useRef(null);
-  const { animationStarted, pendCoords, pivotCoords } = PendulumStore.useState();
-  const params = AppParametersStore.useState();
-  const [, setData] = useState<any[]>([]);
-  useEffect(() => {
-    if (animationStarted) {
-      const newData = getPhaseSpaceData(pivotCoords, pendCoords, params);
+class PhaseSpacePlot extends React.Component<Props, State> implements PSDSubscriber {
+  private svgRef = React.createRef<SVGSVGElement>();
+  private observable?: PhaseSpaceDataObservable;
+  private plotBuilder?: D3PlotBuilder;
 
-      buildD3Plot(newData, svgRef.current!, width, height);
-      setData(newData);
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      currentPatch: 1,
     }
-  }, [animationStarted, pendCoords]);
-  return (
-    <>
-      <svg style={{ width: '100%'}} ref={svgRef}/>
-    </>
-  )
+  }
+
+  notify(patchNumber: number, phaseSpace: PhaseSpace): void {
+    console.log('notified')
+    this.plotBuilder?.drawPlotLine(patchNumber, phaseSpace);
+  }
+
+  componentDidMount() {
+    this.plotBuilder = new D3PlotBuilder(this.props.width, this.props.height, this.svgRef.current!);
+    this.plotBuilder.buildPlotPlane();
+  }
+
+  render() {
+    const { animationStarted, pendCoords, pivotCoords } = this.props.pendInfo;
+    console.log('Rendered');
+    if (animationStarted && !this.observable) {
+      this.observable = createObservable(pivotCoords, pendCoords);
+      this.observable.subscribe(this);
+      this.observable.startCalculations(this.props.params, 1000);
+    } else if (!animationStarted && this.observable) {
+      this.observable.stopCalculations();
+    }
+    return (
+      <>
+        <svg style={{width: '100%'}} ref={this.svgRef} />
+      </>
+    )
+  }
 }
 
 export default PhaseSpacePlot

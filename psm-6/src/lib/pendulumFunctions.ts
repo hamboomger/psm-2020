@@ -41,12 +41,11 @@ export const pendulum = {
     return [pivot[0]+oppSide, pivot[1]+adjSide];
   },
 
-  phaseSpace(theta: number, L: number, params: PhaseSpaceParams): PhaseSpace {
+  phaseSpace(theta: number, L: number, params: PhaseSpaceParams, dotTheta = 0, t0 = 0): PhaseSpace {
     const result: PhaseSpace = [];
     const { iterations, friction, g, dt } = params;
     let currIter = 0;
-    let t = 0;
-    let dotTheta = 0;
+    let t = t0;
     while (currIter++ < iterations) {
       const coord: Vector = [theta, dotTheta];
       const doubleDotTheta = -friction*dotTheta - g / L * Math.sin(theta);

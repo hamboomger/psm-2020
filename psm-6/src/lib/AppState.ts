@@ -1,7 +1,8 @@
 import {Store} from "pullstate";
 import {config} from "./config";
+import {PhaseSpaceParams} from "./pendulumFunctions";
 
-interface IPendulumStore {
+export interface IPendulumStore {
   pivotCoords: [x: number, y: number]
   pendCoords: [x: number, y: number]
   animationStarted: boolean
@@ -15,7 +16,7 @@ export const PendulumStore = new Store<IPendulumStore>({
   theta: () => [0, 0],
 });
 
-export const AppParametersStore = new Store({
+export const AppParametersStore = new Store<PhaseSpaceParams>({
   g: config.g,
   friction: config.friction,
   dt: config.dt,

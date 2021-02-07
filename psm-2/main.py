@@ -3,9 +3,13 @@ import trapezoidal_sums
 import parabolic_sums
 
 SUBDIVISION_LENGTH = 0.5
-X_POINTS = [0, 5]
+X_POINTS = [0, 2]
 
 EXPRESSIONS = {
+    'x': {
+        'name': 'x',
+        'result': 0,
+    },
     'pow(x - 1, 3) - x': {
         'name': '(x-1)^3 - x',
         'result': 55.614
@@ -14,7 +18,7 @@ EXPRESSIONS = {
         'name': '(x+1)^(-2)',
         'result': 0.833
     },
-    'pow(x, 2) - 10 * x': {
+    'pow(x, 5) - 10 * x': {
         'name': 'x^2 - 10x',
         'result': -83.333,
     }

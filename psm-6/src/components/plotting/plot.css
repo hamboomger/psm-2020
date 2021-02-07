@@ -1,0 +1,13 @@
+.plot-line {
+    stroke: #6e6e6e;
+}
+
+.plot-dots {
+    fill: cornsilk;
+    opacity: 50%;
+}
+
+.plot-tick {
+    stroke: gray;
+    opacity: 30%;
+}
