@@ -1,4 +1,4 @@
-import {pendulum, PhaseSpace, PhaseSpaceParams} from "../../lib/pendulumFunctions";
+import {pendulum, PhaseSpace, PhaseSpaceParams} from "./pendulumFunctions";
 
 export interface PSDSubscriber {
   notify(patchNumber: number, phaseSpace: PhaseSpace): void
@@ -11,7 +11,7 @@ export class PhaseSpaceDataObservable {
   private readonly stringLen: number
   private intervalRef?: NodeJS.Timeout
 
-  private subscribers: PSDSubscriber[];
+  subscribers: PSDSubscriber[];
 
   constructor(theta: number, stringLen: number) {
     this.lastTheta = theta;
@@ -38,9 +38,9 @@ export class PhaseSpaceDataObservable {
       clearInterval(this.intervalRef);
     }
     this.intervalRef = setInterval(() => {
-      this.updatePhaseSpaceData(params, patchNumber);
+      this.updatePhaseSpaceData(params, patchNumber++);
     }, intervalMs);
-    this.updatePhaseSpaceData(params, patchNumber);
+    this.updatePhaseSpaceData(params, patchNumber++);
   }
 
   private updatePhaseSpaceData(params: PhaseSpaceParams, patchNumber: number) {

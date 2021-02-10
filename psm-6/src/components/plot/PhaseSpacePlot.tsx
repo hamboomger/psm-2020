@@ -1,65 +1,41 @@
-import React from "react";
-import {IPendulumStore} from "../../lib/AppState";
-import {pendulum, PhaseSpace, PhaseSpaceParams, Vector} from "../../lib/pendulumFunctions";
-import './plot.css';
-import {PhaseSpaceDataObservable, PSDSubscriber} from "./PhaseSpaceDataObservable";
+import React, {useEffect, useRef, useState} from "react";
+import {AppParametersStore, PendulumStore} from "../../lib/AppState";
 import {D3PlotBuilder} from "./D3PlotBuilder";
+import {PSData, PSDSubscriberImpl} from "../../lib/PSDSubscriberImpl";
 
 interface Props {
   width: number
   height: number
-  pendInfo: IPendulumStore
-  params: PhaseSpaceParams
 }
 
-interface State {
-  currentPatch: number;
-}
+const PhaseSpacePlot: React.FC<Props> = ({ width, height}) => {
+  const svgRef = useRef(null);
+  const { animationStarted, pendCoords, pivotCoords, motionObservable } = PendulumStore.useState();
+  const params = AppParametersStore.useState();
+  const [plotBuilder, setPlotBuilder] = useState<D3PlotBuilder>();
+  const [currentPatchData, setCurrentPatchData] = useState<PSData>();
 
-function createObservable(pivotCoords: Vector, pendCoords: Vector): PhaseSpaceDataObservable {
-  const theta = pendulum.theta(pivotCoords, pendCoords, 'rad');
-  const L = pendulum.getStringLength(pivotCoords, pendCoords);
-  return new PhaseSpaceDataObservable(theta, L);
-}
-
-class PhaseSpacePlot extends React.Component<Props, State> implements PSDSubscriber {
-  private svgRef = React.createRef<SVGSVGElement>();
-  private observable?: PhaseSpaceDataObservable;
-  private plotBuilder?: D3PlotBuilder;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      currentPatch: 1,
+  useEffect(() => {
+    const newPlotBuilder = new D3PlotBuilder(width, height, svgRef.current!);
+    newPlotBuilder.buildPlotPlane();
+    setPlotBuilder(newPlotBuilder);
+  }, [])
+  useEffect(() => {
+    if (animationStarted && motionObservable) {
+      motionObservable.subscribe(new PSDSubscriberImpl(undefined, setCurrentPatchData));
+      PendulumStore.update(s => { s.subscribers++ });
     }
-  }
-
-  notify(patchNumber: number, phaseSpace: PhaseSpace): void {
-    console.log('notified')
-    this.plotBuilder?.drawPlotLine(patchNumber, phaseSpace);
-  }
-
-  componentDidMount() {
-    this.plotBuilder = new D3PlotBuilder(this.props.width, this.props.height, this.svgRef.current!);
-    this.plotBuilder.buildPlotPlane();
-  }
-
-  render() {
-    const { animationStarted, pendCoords, pivotCoords } = this.props.pendInfo;
-    console.log('Rendered');
-    if (animationStarted && !this.observable) {
-      this.observable = createObservable(pivotCoords, pendCoords);
-      this.observable.subscribe(this);
-      this.observable.startCalculations(this.props.params, 1000);
-    } else if (!animationStarted && this.observable) {
-      this.observable.stopCalculations();
+  }, [animationStarted, pendCoords, motionObservable]);
+  useEffect(() => {
+    if (animationStarted && currentPatchData && plotBuilder) {
+      plotBuilder.drawPlotLine(currentPatchData);
     }
-    return (
-      <>
-        <svg style={{width: '100%'}} ref={this.svgRef} />
-      </>
-    )
-  }
+  }, [currentPatchData])
+  return (
+    <>
+      <svg style={{ width: '100%'}} ref={svgRef}/>
+    </>
+  )
 }
 
 export default PhaseSpacePlot

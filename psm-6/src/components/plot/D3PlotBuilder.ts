@@ -1,7 +1,7 @@
+import _ from 'lodash';
 import * as d3 from "d3";
 import './plot.css';
-import {PhaseSpaceDataObservable, PSDSubscriber} from "./PhaseSpaceDataObservable";
-import {PhaseSpace} from "../../lib/pendulumFunctions";
+import {PSData} from "../../lib/PSDSubscriberImpl";
 
 export type DataElem = { t: number, theta: number, dotTheta: number }
 export type PlotData = Array<DataElem>;
@@ -25,10 +25,14 @@ export class D3PlotBuilder {
     this.innerHeight = height - this.padding*2;
   }
 
-  drawPlotLine(patchNumber: number, phaseSpace: PhaseSpace) {
-    const data: PlotData = phaseSpace.map(d => {
+  drawPlotLine(rawData: PSData) {
+    console.log(`raw data size: ${Object.keys(rawData).length}`);
+    const data: PlotData = Object.entries(rawData)
+      .sort((a, b) => {
+        return parseFloat(a[0]) - parseFloat(b[0])
+      }).map(d => {
       const [t, [theta, dotTheta]] = d;
-      return { t, theta, dotTheta };
+      return { t: parseFloat(t), theta, dotTheta };
     });
 
     const xValRangeRad = Math.PI / 2;
