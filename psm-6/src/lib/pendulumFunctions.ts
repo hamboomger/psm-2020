@@ -1,3 +1,4 @@
+import _ from 'lodash';
 type AngleUnits = 'rad' | 'deg';
 
 export type Vector = [x: number, y: number]
@@ -7,7 +8,8 @@ export interface PhaseSpaceParams {
   dt: number,
   friction: number,
   iterations: number,
-  g: number
+  g: number,
+  precision: number
 }
 
 export const pendulum = {
@@ -50,7 +52,7 @@ export const pendulum = {
       const coord: Vector = [theta, dotTheta];
       const doubleDotTheta = -friction*dotTheta - g / L * Math.sin(theta);
       const vector: Vector = [dotTheta, doubleDotTheta];
-      result.push([t, coord, vector]);
+      result.push([_.round(t, params.precision), coord, vector]);
 
       theta += dotTheta*dt;
       dotTheta += doubleDotTheta*dt;

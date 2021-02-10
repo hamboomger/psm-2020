@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
-import Pendulum from "./components/Pendulum";
+import Pendulum from "./components/animation/Pendulum";
 import {Layer, Stage} from "react-konva";
 import StartButton from "./components/StartButton";
-import PhaseSpacePlot from "./components/plotting/PhaseSpacePlot";
+import PhaseSpacePlot from "./components/plot/PhaseSpacePlot";
 import {AppParametersStore, PendulumStore} from "./lib/AppState";
 
 function App() {

@@ -20,18 +20,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09924633-9c2e-43d2-9d55-cfe00fc75f51" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/plotting/D3PlotBuilder.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/plotting/PhaseSpaceDataObservable.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/plotting/plot.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../psm-2/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../psm-2/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../psm-4/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/../psm-4/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../psm-4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../psm-4/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/util.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Pendulum.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Pendulum.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/plotting/PhaseSpacePlot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/plotting/PhaseSpacePlot.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/plotting/d3Plot.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Pendulum.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/animation/Pendulum.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Plot.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/StartButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StartButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/plotting/D3PlotBuilder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/plot/D3PlotBuilder.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/plotting/PhaseSpaceDataObservable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/plot/PhaseSpaceDataObservable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/plotting/PhaseSpacePlot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/plot/PhaseSpacePlot.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/plotting/plot.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/plot/plot.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/AppState.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/AppState.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/config.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/pendulumFunctions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/pendulumFunctions.ts" afterDir="false" />
@@ -56,6 +57,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TypeScript" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -69,6 +71,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/animation" />
       <recent name="$PROJECT_DIR$/src/components/plotting" />
     </key>
   </component>
@@ -88,7 +91,9 @@
       <workItem from="1612261881282" duration="14966000" />
       <workItem from="1612344667663" duration="14000" />
       <workItem from="1612344843043" duration="10187000" />
-      <workItem from="1612507961236" duration="5862000" />
+      <workItem from="1612507961236" duration="9944000" />
+      <workItem from="1612784612680" duration="662000" />
+      <workItem from="1612955977435" duration="387000" />
     </task>
     <servers />
   </component>
@@ -124,10 +129,11 @@
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
     <state x="618" y="224" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611596063324" />
-    <state x="660" y="279" width="600" height="522" key="find.popup" timestamp="1612510090064">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="495" y="233" width="567" height="522" key="find.popup" timestamp="1612784986706">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="660" y="279" width="600" height="522" key="find.popup/255.1080.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1612510090064" />
+    <state x="495" y="233" width="567" height="522" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1612784986706" />
+    <state x="660" y="279" width="600" height="522" key="find.popup/255.1080.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1612713230035" />
     <state x="660" y="279" width="600" height="522" key="find.popup/255.1105.1440.875/0.0.1920.1080@0.0.1920.1080" timestamp="1612276880974" />
     <state width="600" height="440" key="javadoc.popup" timestamp="1612358681892">
       <screen x="0" y="0" width="1920" height="1080" />

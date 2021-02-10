@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const StartButton: React.FC = () => {
-  const animationStarted = PendulumStore.useState((e) => e.animationStarted)
+  const { animationStarted, motionObservable } = PendulumStore.useState();
   const classes = useStyles();
 
   return (
@@ -25,6 +25,9 @@ const StartButton: React.FC = () => {
       PendulumStore.update((s) => {
         s.animationStarted = !animationStarted
       });
+      if (animationStarted) {
+        motionObservable?.stopCalculations();
+      }
     }}
          variant="extended"
          color="primary"
