@@ -20,15 +20,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09924633-9c2e-43d2-9d55-cfe00fc75f51" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/lib/PSDSubscriberImpl.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/settings/MotionSettings.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/StartButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StartButton.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/animation/Pendulum.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/animation/Pendulum.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/plot/D3PlotBuilder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/plot/D3PlotBuilder.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/plot/PhaseSpaceDataObservable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/PhaseSpaceDataObservable.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/plot/PhaseSpacePlot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/plot/PhaseSpacePlot.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/plot/plot.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/plot/plot.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/AppState.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/AppState.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/util.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/util.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +89,9 @@
       <workItem from="1612344843043" duration="10187000" />
       <workItem from="1612507961236" duration="9944000" />
       <workItem from="1612784612680" duration="662000" />
-      <workItem from="1612955977435" duration="8352000" />
+      <workItem from="1612955977435" duration="12284000" />
+      <workItem from="1613037878505" duration="15040000" />
+      <workItem from="1613148896501" duration="115000" />
     </task>
     <servers />
   </component>
@@ -117,10 +121,10 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="825" y="435" key="#ESLint" timestamp="1612276403782">
+    <state x="825" y="435" key="#ESLint" timestamp="1612980806028">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="825" y="435" key="#ESLint/255.1080.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1612276403782" />
+    <state x="825" y="435" key="#ESLint/255.1080.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1612980806028" />
     <state x="699" y="376" key="#Notifications" timestamp="1611590286521">
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
@@ -137,6 +141,10 @@
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
     <state x="618" y="224" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611596063324" />
+    <state x="765" y="734" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612972438815">
+      <screen x="0" y="25" width="1920" height="1055" />
+    </state>
+    <state x="765" y="734" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1612972438815" />
     <state x="495" y="233" width="567" height="522" key="find.popup" timestamp="1612784986706">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -151,12 +159,12 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="625" y="255" width="670" height="675" key="run.anything.popup/255.1080.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1612963817028" />
-    <state x="625" y="240" width="670" height="676" key="search.everywhere.popup" timestamp="1612967091449">
+    <state x="625" y="240" width="670" height="676" key="search.everywhere.popup" timestamp="1613055774579">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="625" y="240" width="670" height="676" key="search.everywhere.popup/251.1080.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1612508478225" />
     <state x="833" y="320" width="894" height="902" key="search.everywhere.popup/251.1440.1440.900/0.0.2560.1440@0.0.2560.1440" timestamp="1612508520476" />
-    <state x="625" y="240" width="670" height="676" key="search.everywhere.popup/255.1080.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1612967091449" />
+    <state x="625" y="240" width="670" height="676" key="search.everywhere.popup/255.1080.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1613055774579" />
     <state x="625" y="259" key="search.everywhere.popup/255.1105.1440.875/0.25.1920.1055@0.25.1920.1055" timestamp="1611595864804" />
   </component>
 </project>

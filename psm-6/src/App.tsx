@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import Pendulum from "./components/animation/Pendulum";
-import {Layer, Stage} from "react-konva";
 import StartButton from "./components/StartButton";
-import PhaseSpacePlot from "./components/plot/PhaseSpacePlot";
 import {AppParametersStore, PendulumStore} from "./lib/AppState";
+import Pendulum from "./components/animation/Pendulum";
+import PhaseSpacePlot from "./components/plot/PhaseSpacePlot";
+import MotionSettings from "./components/settings/MotionSettings";
 
 function App() {
   const { motionObservable: observable, subscribers } = PendulumStore.useState();
@@ -15,14 +15,12 @@ function App() {
       console.log('Calculations started')
     }
   }, [observable, subscribers])
+  console.log(`window.innerWidth: ${window.innerWidth}`);
   return (
     <div className="App">
-      <Stage width={window.innerWidth / 2} height={window.innerHeight}>
-        <Layer>
-          <Pendulum />
-        </Layer>
-      </Stage>
+      <Pendulum height={window.innerHeight} width={window.innerWidth/2}/>
       <PhaseSpacePlot height={window.innerHeight} width={window.innerWidth/2} />
+      <MotionSettings />
       <StartButton />
     </div>
   );

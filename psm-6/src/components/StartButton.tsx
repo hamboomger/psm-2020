@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 const StartButton: React.FC = () => {
   const { animationStarted, motionObservable } = PendulumStore.useState();
   const classes = useStyles();
+  console.log(`animation started: ${animationStarted}`);
 
   return (
     <Fab onClick={() => {

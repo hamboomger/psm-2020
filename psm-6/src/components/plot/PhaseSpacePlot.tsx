@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {AppParametersStore, PendulumStore} from "../../lib/AppState";
+import {PendulumStore} from "../../lib/AppState";
 import {D3PlotBuilder} from "./D3PlotBuilder";
 import {PSData, PSDSubscriberImpl} from "../../lib/PSDSubscriberImpl";
 
@@ -8,10 +8,9 @@ interface Props {
   height: number
 }
 
-const PhaseSpacePlot: React.FC<Props> = ({ width, height}) => {
+const PhaseSpacePlot: React.FC<Props> = ({width, height}) => {
   const svgRef = useRef(null);
-  const { animationStarted, pendCoords, pivotCoords, motionObservable } = PendulumStore.useState();
-  const params = AppParametersStore.useState();
+  const {animationStarted, pendCoords, motionObservable} = PendulumStore.useState();
   const [plotBuilder, setPlotBuilder] = useState<D3PlotBuilder>();
   const [currentPatchData, setCurrentPatchData] = useState<PSData>();
 
@@ -23,7 +22,9 @@ const PhaseSpacePlot: React.FC<Props> = ({ width, height}) => {
   useEffect(() => {
     if (animationStarted && motionObservable) {
       motionObservable.subscribe(new PSDSubscriberImpl(undefined, setCurrentPatchData));
-      PendulumStore.update(s => { s.subscribers++ });
+      PendulumStore.update(s => {
+        s.subscribers++
+      });
     }
   }, [animationStarted, pendCoords, motionObservable]);
   useEffect(() => {
@@ -33,7 +34,7 @@ const PhaseSpacePlot: React.FC<Props> = ({ width, height}) => {
   }, [currentPatchData])
   return (
     <>
-      <svg style={{ width: '100%'}} ref={svgRef}/>
+      <svg style={{width: '100%'}} ref={svgRef}/>
     </>
   )
 }
