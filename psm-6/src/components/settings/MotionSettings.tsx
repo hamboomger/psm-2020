@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from "react";
 import {makeStyles, Paper, Slider, Typography} from "@material-ui/core";
+import {AppParametersStore} from "../../lib/AppState";
 
 const MIN_GRAVITY_VALUE = 2;
 const MAX_GRAVITY_VALUE = 40;
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MotionSettings: React.FC = () => {
   const classes = useStyles();
+  const { friction, g } = AppParametersStore.useState();
 
   const range = MAX_GRAVITY_VALUE - MIN_GRAVITY_VALUE;
   const marksIndexes = _.range(MIN_GRAVITY_VALUE, MAX_GRAVITY_VALUE+1, Math.round(range/4));
@@ -62,9 +64,11 @@ const MotionSettings: React.FC = () => {
           Gravity:
         </Typography>
         <Slider
-          defaultValue={10}
+          defaultValue={g}
           getAriaValueText={valuetext}
-          // aria-labelledby="discrete-slider-custom"
+          onChange={(event, val) => AppParametersStore.update(s => {
+              s.g = val as number;
+          })}
           valueLabelDisplay="auto"
           marks={gravityMarks}
           step={GRAVITY_STEP}
@@ -75,9 +79,11 @@ const MotionSettings: React.FC = () => {
           Friction:
         </Typography>
         <Slider
-          defaultValue={10}
+          defaultValue={friction*10}
           getAriaValueText={valuetext}
-          // aria-labelledby="discrete-slider-custom"
+          onChange={(event, val) => AppParametersStore.update(s => {
+            s.friction = (val as number) / 10;
+          })}
           valueLabelDisplay="auto"
           marks={frictionMarks}
           step={0.1}

@@ -17,9 +17,6 @@ export const pendulum = {
     const adjSide = Math.abs(pivot[1] - pendulum[1]);
     const oppSide = Math.abs(pivot[0] - pendulum[0]);
 
-    console.log('adjSide: ' + adjSide);
-    console.log('oppSide: ' + oppSide);
-
     const angleRad = Math.atan(oppSide / adjSide) ;
     return units === 'rad' ? angleRad : angleRad * 180 / Math.PI
   },

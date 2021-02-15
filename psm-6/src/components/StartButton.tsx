@@ -1,8 +1,9 @@
 import {Fab, makeStyles} from '@material-ui/core';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import React from "react";
-import {PendulumStore} from "../lib/AppState";
+import {AnimationState, PendulumStore} from "../lib/AppState";
 
 const useStyles = makeStyles((theme) => ({
   fabButton: {
@@ -17,16 +18,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const StartButton: React.FC = () => {
-  const { animationStarted, motionObservable } = PendulumStore.useState();
+  const { animationState, motionObservable } = PendulumStore.useState();
   const classes = useStyles();
-  console.log(`animation started: ${animationStarted}`);
+
+  const stateToJsxButton: { [prop in AnimationState]: any } = {
+    rest: (
+      <>
+        <PlayCircleOutlineIcon className={classes.extendedIcon}/>
+        Start
+      </>
+    ),
+    inMotion: (
+      <>
+        <PauseCircleOutlineIcon className={classes.extendedIcon}/>
+        Pause
+      </>
+    ),
+    paused: (
+      <>
+        <RotateLeftIcon className={classes.extendedIcon}/>
+        Reset
+      </>
+    )
+  }
 
   return (
     <Fab onClick={() => {
       PendulumStore.update((s) => {
-        s.animationStarted = !animationStarted
+        switch (animationState) {
+          case "rest":
+            s.animationState = 'inMotion';
+            break;
+          case "inMotion":
+            s.animationState = 'paused';
+            break;
+          case "paused":
+            s.animationState = 'rest';
+            s.resetAnimation = true;
+            break;
+        }
       });
-      if (animationStarted) {
+      if (animationState === 'paused') {
         motionObservable?.stopCalculations();
       }
     }}
@@ -35,19 +67,7 @@ const StartButton: React.FC = () => {
          aria-label="add"
          className={classes.fabButton}
     >
-      {
-        animationStarted ? (
-          <>
-            <PauseCircleOutlineIcon className={classes.extendedIcon}/>
-            Pause
-          </>
-        ) : (
-          <>
-            <PlayCircleOutlineIcon className={classes.extendedIcon}/>
-            Start
-          </>
-        )
-      }
+      { stateToJsxButton[animationState] }
     </Fab>
   );
 }

@@ -20,12 +20,10 @@ export class PSDSubscriberImpl implements PSDSubscriber {
   }
 
   private clearPartOfCache(elementsPerPatch: number, currentPatch: number) {
-    console.log(`current patch: ${currentPatch}`);
     if (currentPatch - this.bottomPatchNumber > CACHE_PATCHES_SIZE) {
       const keysToDelete = Object.keys(this.entireDataCache)
         .sort((a, b) => parseFloat(a) - parseFloat(b))
         .slice(0, elementsPerPatch);
-      console.log(`keys to delete: ${keysToDelete}`);
       keysToDelete.forEach(key => {
         delete this.entireDataCache[key];
       });

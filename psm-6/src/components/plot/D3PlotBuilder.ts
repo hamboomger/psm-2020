@@ -25,6 +25,7 @@ export class D3PlotBuilder {
   private innerWidth: number;
   private innerHeight: number;
 
+  private currentDrawing?: D3Selection;
   private readonly ref: SVGSVGElement;
   private selection?: D3Selection;
   private tooltip?: D3Selection;
@@ -39,7 +40,7 @@ export class D3PlotBuilder {
   }
 
   resetDrawings() {
-
+    d3.selectAll("path.plot-line").remove();
   }
 
   drawPlotLine(rawData: PSData) {
@@ -71,7 +72,6 @@ export class D3PlotBuilder {
 
     var mouseover = () => {
       this.tooltip?.style("opacity", 1)
-      console.log('Mouse over event triggered!');
     }
     var mousemove = (d: any) => {
 
@@ -93,22 +93,28 @@ export class D3PlotBuilder {
       .y(d => yScale(yValue(d)))
       .curve(d3.curveNatural);
 
-    var path = this.selection!.append("path")
+    this.currentDrawing = this.selection!.append("path")
       .attr("d", lineGen(data)!)
       .attr("class", "plot-line")
       .on("mouseover", mouseover)
       .on("mousemove", mousemove)
       .on("mouseout", mouseleave);
 
-    var totalLength = path.node()!.getTotalLength();
+    var totalLength = this.currentDrawing.node()!.getTotalLength();
 
-    path
+    this.currentDrawing
       .attr("stroke-dasharray", totalLength + " " + totalLength)
       .attr("stroke-dashoffset", totalLength)
       .transition()
       .duration(1000)
       .ease(d3.easeLinear)
       .attr("stroke-dashoffset", 0);
+  }
+
+  pauseDrawing() {
+    if (this.currentDrawing) {
+      this.currentDrawing.interrupt();
+    }
   }
 
   buildPlotPlane() {

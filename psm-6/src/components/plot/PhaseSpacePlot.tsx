@@ -10,7 +10,7 @@ interface Props {
 
 const PhaseSpacePlot: React.FC<Props> = ({width, height}) => {
   const svgRef = useRef(null);
-  const {animationStarted, pendCoords, motionObservable} = PendulumStore.useState();
+  const {animationState, pendCoords, motionObservable, resetAnimation} = PendulumStore.useState();
   const [plotBuilder, setPlotBuilder] = useState<D3PlotBuilder>();
   const [currentPatchData, setCurrentPatchData] = useState<PSData>();
 
@@ -20,18 +20,24 @@ const PhaseSpacePlot: React.FC<Props> = ({width, height}) => {
     setPlotBuilder(newPlotBuilder);
   }, [])
   useEffect(() => {
-    if (animationStarted && motionObservable) {
+    if (animationState === 'inMotion' && motionObservable) {
       motionObservable.subscribe(new PSDSubscriberImpl(undefined, setCurrentPatchData));
-      PendulumStore.update(s => {
-        s.subscribers++
-      });
+      PendulumStore.update(s => { s.subscribers++ });
+    } else if (animationState === 'paused') {
+      plotBuilder?.pauseDrawing();
     }
-  }, [animationStarted, pendCoords, motionObservable]);
+  }, [animationState, pendCoords, motionObservable]);
   useEffect(() => {
-    if (animationStarted && currentPatchData && plotBuilder) {
+    if (animationState === 'inMotion' && currentPatchData && plotBuilder) {
       plotBuilder.drawPlotLine(currentPatchData);
     }
   }, [currentPatchData])
+  useEffect(() => {
+    if (resetAnimation) {
+      plotBuilder?.resetDrawings();
+      PendulumStore.update(s => { s.subscribers-- });
+    }
+  }, [resetAnimation])
   return (
     <>
       <svg style={{width: '100%'}} ref={svgRef}/>

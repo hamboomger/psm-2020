@@ -3,7 +3,7 @@ import React, {RefObject, useEffect, useRef, useState} from "react";
 import {Circle, Layer, Line, Stage, Text} from "react-konva";
 import Konva from "konva";
 import {pendulum, Vector} from "../../lib/pendulumFunctions";
-import {AppParametersStore, PendulumStore} from "../../lib/AppState";
+import {AppParametersStore, INITIAL_PEND_COORDS, PendulumStore} from "../../lib/AppState";
 import {DEGREE_UTF8_SYMBOL, DOT_THETA_UTF8_SYMBOL, precision, THETA_UTF8_SYMBOL} from "../../lib/util";
 import {PSData, PSDSubscriberImpl} from "../../lib/PSDSubscriberImpl";
 import {PhaseSpaceDataObservable} from "../../lib/PhaseSpaceDataObservable";
@@ -20,7 +20,7 @@ function setLabels(
 ) {
   const theta = _.round(angleType === 'deg' ? thetaValue : thetaValue * 180 / Math.PI, 2);
   thetaLblRef.current?.setText(`${THETA_UTF8_SYMBOL}: ${theta}${DEGREE_UTF8_SYMBOL}`);
-  if (dotThetaValue && dotThetaLblRef) {
+  if (dotThetaValue !== undefined && dotThetaLblRef) {
     const dotTheta = _.round(angleType === 'deg' ? dotThetaValue : dotThetaValue * 180 / Math.PI, 2);
     dotThetaLblRef.current?.setText(`${DOT_THETA_UTF8_SYMBOL}: ${dotTheta}${DEGREE_UTF8_SYMBOL}/s`);
   }
@@ -28,7 +28,7 @@ function setLabels(
 
 function startAnimation(newPendCoords: Vector, pivotCoords: Vector) {
   PendulumStore.update(s => {
-    s.animationStarted = true;
+    s.animationState = 'inMotion';
     s.pendCoords = newPendCoords;
     const sLength = pendulum.getStringLength(pivotCoords, newPendCoords);
     const theta = pendulum.theta(pivotCoords, newPendCoords, 'rad');
@@ -36,7 +36,7 @@ function startAnimation(newPendCoords: Vector, pivotCoords: Vector) {
   })
 }
 
-function updateElements(
+function updateStringPos(
   newPendCoords: Vector, pivotCoords: Vector,
   lineRef: RefObject<Konva.Line>, thetaLblRef: RefObject<Konva.Text>,
 ) {
@@ -46,13 +46,13 @@ function updateElements(
 }
 
 const Pendulum: React.FC<Props> = ({ width, height }) => {
-  const circleRef = useRef<Konva.Circle>(null);
+  const pendRef = useRef<Konva.Circle>(null);
   const lineRef = useRef<Konva.Line>(null);
   const thetaLblRef = useRef<Konva.Text>(null);
   const dotThetaLblRef = useRef<Konva.Text>(null);
 
-  const {pivotCoords, pendCoords, animationStarted, motionObservable} = PendulumStore.useState();
-  const [pendX, pendY] = [circleRef.current?.x() ?? pendCoords[0], circleRef.current?.y() ?? pendCoords[1]];
+  const {pivotCoords, pendCoords, animationState, motionObservable, resetAnimation} = PendulumStore.useState();
+  const [pendX, pendY] = [pendRef.current?.x() ?? pendCoords[0], pendRef.current?.y() ?? pendCoords[1]];
   const params = AppParametersStore.useState();
 
   const [konvaAnimation, setKonvaAnimation] = useState<Konva.Animation | undefined>();
@@ -60,17 +60,17 @@ const Pendulum: React.FC<Props> = ({ width, height }) => {
   const [psData, setPSData] = useState<PSData>();
 
   useEffect(() => {
-    if (animationStarted && motionObservable) {
+    if (animationState === 'inMotion' && motionObservable) {
       const newPSDSub = new PSDSubscriberImpl(setPSData);
       setPSDSub(newPSDSub);
       motionObservable.subscribe(newPSDSub);
       PendulumStore.update(s => { s.subscribers++ });
     }
-  }, [animationStarted, motionObservable]);
+  }, [animationState, motionObservable]);
 
   useEffect(() => {
-    if (animationStarted && psData && psdSub && !konvaAnimation) {
-      const circle = circleRef.current!;
+    if (animationState === 'inMotion' && psData && psdSub && !konvaAnimation) {
+      const circle = pendRef.current!;
       const line = lineRef.current!;
       const konvaAnimation = new Konva.Animation((frame => {
         const {time} = frame!;
@@ -79,7 +79,6 @@ const Pendulum: React.FC<Props> = ({ width, height }) => {
         const realPsData = psdSub.entireDataCache;
         if (!realPsData[roundedTime+'']) {
           console.log(`Can't find the rounded time of ${roundedTime}!`);
-          console.log(`PSData # of keys: ${Object.keys(realPsData).length}`);
         } else {
           const [theta, dotTheta] = realPsData[roundedTime+''];
           const sLength = pendulum.getStringLength(pivotCoords, pendCoords);
@@ -90,16 +89,27 @@ const Pendulum: React.FC<Props> = ({ width, height }) => {
         }
       }));
       setKonvaAnimation(konvaAnimation);
-      konvaAnimation.addLayer(circleRef.current?.getLayer());
+      konvaAnimation.addLayer(pendRef.current?.getLayer());
       konvaAnimation.start();
     }
-    if (!animationStarted && konvaAnimation) {
+    if (animationState === 'paused' && konvaAnimation) {
       konvaAnimation.stop();
       setKonvaAnimation(undefined);
-    } else if (animationStarted && konvaAnimation) {
+    } else if (animationState === 'inMotion' && konvaAnimation) {
       konvaAnimation.start();
     }
-  }, [animationStarted, konvaAnimation, psData, psdSub])
+  }, [animationState, konvaAnimation, psData, psdSub])
+  useEffect(() => {
+    if (resetAnimation) {
+      PendulumStore.update(s => {
+        s.pendCoords = INITIAL_PEND_COORDS;
+        s.subscribers--;
+      });
+    }
+    pendRef.current?.position({ x: INITIAL_PEND_COORDS[0], y: INITIAL_PEND_COORDS[1]});
+    updateStringPos(INITIAL_PEND_COORDS, pivotCoords, lineRef, thetaLblRef);
+    setLabels(0, thetaLblRef, 0, dotThetaLblRef);
+  }, [resetAnimation])
   return (
     <Stage width={width} height={height}>
       <Layer>
@@ -115,10 +125,10 @@ const Pendulum: React.FC<Props> = ({ width, height }) => {
           x={pendX}
           y={pendY}
           radius={20}
-          ref={circleRef}
+          ref={pendRef}
           draggable={true}
-          onDragMove={(e) => updateElements([e.target.x(), e.target.y()], pivotCoords, lineRef, thetaLblRef)}
-          onDragStart={() => PendulumStore.update(s => { s.animationStarted = false })}
+          onDragMove={(e) => updateStringPos([e.target.x(), e.target.y()], pivotCoords, lineRef, thetaLblRef)}
+          onDragStart={() => PendulumStore.update(s => { s.animationState = 'paused' })}
           onDragEnd={(e) => startAnimation([e.target.x(), e.target.y()], pivotCoords)}
         />
         <Text

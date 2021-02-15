@@ -7,15 +7,26 @@ import PhaseSpacePlot from "./components/plot/PhaseSpacePlot";
 import MotionSettings from "./components/settings/MotionSettings";
 
 function App() {
-  const { motionObservable: observable, subscribers } = PendulumStore.useState();
+  const { motionObservable: observable, subscribers, animationState, resetAnimation } = PendulumStore.useState();
   const params = AppParametersStore.useState();
   useEffect(() => {
     if (observable && subscribers === 2) {
       observable.startCalculations(params, 1000);
-      console.log('Calculations started')
     }
-  }, [observable, subscribers])
-  console.log(`window.innerWidth: ${window.innerWidth}`);
+  }, [observable, subscribers]);
+  useEffect(() => {
+    if (resetAnimation && subscribers === 0) {
+      PendulumStore.update(s => {
+        s.resetAnimation = false
+        s.motionObservable = undefined;
+      });
+    }
+  }, [resetAnimation, subscribers]);
+  useEffect(() => {
+    if (animationState === 'paused') {
+      observable?.stopCalculations();
+    }
+  }, [animationState]);
   return (
     <div className="App">
       <Pendulum height={window.innerHeight} width={window.innerWidth/2}/>
